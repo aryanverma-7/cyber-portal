@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}AI Assistant{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>
+                🤖 CyberShield AI Assistant
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div
+                id="chat-box"
+                style="
+                    height:500px;
+                    overflow-y:auto;
+                    border:1px solid #ddd;
+                    padding:15px;
+                    margin-bottom:20px;
+                    background:#0f172a;
+                    border-radius:12px;
+                ">
+            </div>
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    id="user-message"
+                    class="form-control"
+                    placeholder="Ask anything about cybersecurity..."
+                    onkeypress="if(event.key==='Enter') sendMessage()">
+
+                <button
+                    id="send-btn"
+                    class="btn btn-primary"
+                    onclick="sendMessage()">
+
+                    Send
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+.ai-response{
+
+    line-height:1.8;
+    font-size:15px;
+
+    color:white;
+
+}
+
+.ai-response h1,
+.ai-response h2,
+.ai-response h3,
+.ai-response h4{
+
+    color:#00d4ff;
+
+    margin-top:15px;
+
+}
+
+.ai-response ul{
+
+    padding-left:25px;
+
+}
+
+.ai-response li{
+
+    margin-bottom:8px;
+
+}
+
+.ai-response table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+}
+
+.ai-response table,
+.ai-response th,
+.ai-response td{
+
+    border:1px solid rgba(255,255,255,.2);
+
+}
+
+.ai-response th{
+
+    background:#111827;
+
+    padding:10px;
+
+}
+
+.ai-response td{
+
+    padding:10px;
+
+}
+
+.ai-response code{
+
+    background:#1e293b;
+
+    padding:3px 6px;
+
+    border-radius:5px;
+
+    color:#00d4ff;
+
+}
+
+.ai-response pre{
+
+    background:#111827;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    overflow-x:auto;
+
+    color:#ffffff;
+
+}
+
+</style>
+
+<script>
+
+async function sendMessage() {
+
+    const input =
+    document.getElementById(
+        "user-message"
+    );
+
+    const chatBox =
+    document.getElementById(
+        "chat-box"
+    );
+
+    const sendBtn =
+    document.getElementById(
+        "send-btn"
+    );
+
+    const message =
+    input.value.trim();
+
+    if(message === "")
+        return;
+
+    chatBox.innerHTML += `
+        <div class="mb-3">
+
+            <div class="card p-3">
+
+                <strong>
+                    You:
+                </strong>
+
+                <br>
+
+                ${message}
+
+            </div>
+
+        </div>
+    `;
+
+    input.value = "";
+
+    sendBtn.disabled = true;
+
+    sendBtn.innerText =
+    "Thinking...";
+
+    chatBox.innerHTML += `
+        <div
+            id="loading-msg"
+            class="mb-3">
+
+            <div class="card p-3">
+
+                <strong>
+                    AI:
+                </strong>
+
+                <br>
+
+                Generating response...
+
+            </div>
+
+        </div>
+    `;
+
+    chatBox.scrollTop =
+    chatBox.scrollHeight;
+
+    try{
+
+        const response =
+        await fetch(
+            "/chatbot/ask",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    question:message
+                })
+            }
+        );
+
+        const data =
+        await response.json();
+
+        const loading =
+        document.getElementById(
+            "loading-msg"
+        );
+
+        if(loading){
+
+            loading.remove();
+
+        }
+
+        chatBox.innerHTML += `
+            <div class="mb-3">
+
+                <div class="card p-3">
+
+                    <h5 class="text-info">
+
+                        🤖 AI Assistant
+
+                    </h5>
+
+                    <div class="ai-response">
+
+                        ${
+                            data.answer ||
+                            "No response generated."
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+    catch(error){
+
+        const loading =
+        document.getElementById(
+            "loading-msg"
+        );
+
+        if(loading){
+
+            loading.remove();
+
+        }
+
+        chatBox.innerHTML += `
+            <div
+                class="alert alert-danger">
+
+                Error:
+                ${error}
+
+            </div>
+        `;
+    }
+
+    sendBtn.disabled = false;
+
+    sendBtn.innerText =
+    "Send";
+
+    chatBox.scrollTop =
+    chatBox.scrollHeight;
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Threat Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="cyber-card p-4">
+
+        <h1 class="text-info mb-4">
+            <i class="bi bi-shield-exclamation"></i>
+            Cyber Threat Dashboard
+        </h1>
+
+        <hr>
+
+        <!-- Stats Cards -->
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <h2>{{ total_checks }}</h2>
+                    <p>Total Checks</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <h2>{{ phishing_detected }}</h2>
+                    <p>Threats Detected</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <h2>{{ safe_emails }}</h2>
+                    <p>Safe Emails</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Chart -->
+        <div class="cyber-card p-4 mt-5">
+
+            <h4 class="text-cyan mb-4">
+                Risk Distribution
+            </h4>
+
+            <canvas id="riskChart"></canvas>
+
+        </div>
+
+        <!-- Latest Threats -->
+        <div class="cyber-card p-4 mt-5">
+
+            <h4 class="text-danger mb-4">
+                Latest Threats
+            </h4>
+
+            {% if latest_threats %}
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Risk Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for threat in latest_threats %}
+
+                        <tr>
+                            <td>{{ threat.email_subject }}</td>
+                            <td>{{ threat.risk_score }}</td>
+                            <td>{{ threat.created_at.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p>No threats detected yet.</p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Trending Subjects -->
+        <div class="cyber-card p-4 mt-5">
+
+            <h4 class="text-warning mb-4">
+                Trending Phishing Subjects
+            </h4>
+
+            {% if trending %}
+
+            <div class="table-responsive">
+
+                <table class="table table-dark table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Occurrences</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in trending %}
+
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p>No trending phishing campaigns found.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+const riskData = [
+{% for item in risk_distribution %}
+{
+    score: {{ item[0] }},
+    count: {{ item[1] }}
+},
+{% endfor %}
+];
+
+const chartElement = document.getElementById("riskChart");
+
+if(chartElement){
+
+    new Chart(chartElement, {
+
+        type: "bar",
+
+        data: {
+
+            labels: riskData.map(item => item.score),
+
+            datasets: [{
+
+                label: "Threat Count",
+
+                data: riskData.map(item => item.count)
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    labels: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                },
+
+                y: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

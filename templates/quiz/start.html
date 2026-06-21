@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}
+Start Quiz
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1 class="text-info">
+        Cyber Security Quiz
+    </h1>
+
+    <hr>
+
+    <form id="quizForm">
+
+        {% for question in questions %}
+
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h5>
+                    Question {{ loop.index }}
+                </h5>
+
+                <p>
+                    {{ question.question }}
+                </p>
+
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="{{ question.id }}"
+                           value="a">
+
+                    <label class="form-check-label">
+                        {{ question.option_a }}
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="{{ question.id }}"
+                           value="b">
+
+                    <label class="form-check-label">
+                        {{ question.option_b }}
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="{{ question.id }}"
+                           value="c">
+
+                    <label class="form-check-label">
+                        {{ question.option_c }}
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="{{ question.id }}"
+                           value="d">
+
+                    <label class="form-check-label">
+                        {{ question.option_d }}
+                    </label>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+        <button
+            type="button"
+            class="btn btn-success"
+            onclick="submitQuiz()">
+
+            Submit Quiz
+
+        </button>
+
+    </form>
+
+    <div id="resultBox" class="mt-4"></div>
+
+</div>
+
+<script>
+
+function submitQuiz() {
+
+    let answers = {};
+
+    document
+        .querySelectorAll('input[type=radio]:checked')
+        .forEach(input => {
+
+            answers[input.name] = input.value;
+
+        });
+
+    fetch("/quiz/submit", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            answers: answers
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        document.getElementById("resultBox").innerHTML = `
+
+            <div class="alert alert-info">
+
+                <h4>Quiz Finished</h4>
+
+                <p>
+                    Score:
+                    ${data.score}
+                </p>
+
+                <p>
+                    Correct:
+                    ${data.correct}
+                    /
+                    ${data.total}
+                </p>
+
+                <p>
+                    Percentage:
+                    ${data.percentage}%
+                </p>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

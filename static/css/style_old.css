@@ -1,0 +1,167 @@
+/* CyberShield - Dark Cybersecurity Theme */
+
+/* Color Variables */
+:root {
+    --cyber-dark: #0a0e17;
+    --cyber-dark-secondary: #111827;
+    --cyber-blue: #1e3a8a;
+    --cyber-cyan: #00d4ff;
+    --cyber-green: #00ff88;
+    --cyber-red: #ff4757;
+    --cyber-purple: #7c3aed;
+    --cyber-text: #e5e7eb;
+    --cyber-text-muted: #9ca3af;
+    --cyber-border: #374151;
+}
+
+/* Base Styles */
+body {
+    background: var(--cyber-dark);
+    color: var(--cyber-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.cyber-bg {
+    background: linear-gradient(135deg, var(--cyber-dark) 0%, var(--cyber-dark-secondary) 100%);
+    background-attachment: fixed;
+}
+
+/* Cyber Animation */
+@keyframes cyberGlow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--cyber-cyan),
+                    0 0 10px var(--cyber-cyan),
+                    0 0 20px var(--cyber-cyan);
+    }
+    50% {
+        box-shadow: 0 0 10px var(--cyber-cyan),
+                    0 0 20px var(--cyber-cyan),
+                    0 0 40px var(--cyber-cyan);
+    }
+}
+
+@keyframes cyberScan {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+/* Text Colors */
+.text-cyan {
+    color: var(--cyber-cyan) !important;
+}
+
+.text-green {
+    color: var(--cyber-green) !important;
+}
+
+.text-red {
+    color: var(--cyber-red) !important;
+}
+
+.text-purple {
+    color: var(--cyber-purple) !important;
+}
+
+/* Navbar */
+.cyber-navbar {
+    background: linear-gradient(90deg, var(--cyber-dark-secondary) 0%, var(--cyber-blue) 100%);
+    border-bottom: 1px solid var(--cyber-cyan);
+    box-shadow: 0 2px 10px var(--cyber-cyan);
+}
+
+.cyber-navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--cyber-cyan);
+}
+
+.cyber-navbar .nav-link {
+    color: var(--cyber-text) !important;
+    transition: all 0.3s ease;
+}
+
+.cyber-navbar .nav-link:hover {
+    color: var(--cyber-cyan) !important;
+    text-shadow: 0 0 10px var(--cyber-cyan);
+}
+
+/* Buttons */
+.btn-cyan {
+    background: var(--cyber-cyan);
+    color: var(--cyber-dark);
+    border: 1px solid var(--cyber-cyan);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-cyan:hover {
+    background: transparent;
+    color: var(--cyber-cyan);
+    box-shadow: 0 0 20px var(--cyber-cyan);
+}
+
+.btn-green {
+    background: var(--cyber-green);
+    color: var(--cyber-dark);
+    border: 1px solid var(--cyber-green);
+    font-weight: 600;
+}
+
+.btn-green:hover {
+    background: transparent;
+    color: var(--cyber-green);
+    box-shadow: 0 0 20px var(--cyber-green);
+}
+
+.btn-red {
+    background: var(--cyber-red);
+    color: white;
+    border: 1px solid var(--cyber-red);
+}
+
+/* Cards */
+.cyber-card {
+    background: var(--cyber-dark-secondary);
+    border: 1px solid var(--cyber-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.cyber-card:hover {
+    border-color: var(--cyber-cyan);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.cyber-card .card-title {
+    color: var(--cyber-cyan);
+    font-weight: 600;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: linear-gradient(135deg, var(--cyber-dark-secondary) 0%, var(--cyber-blue) 100%);
+    border: 1px solid var(--cyber-cyan);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    animation: cyberGlow 3s infinite;
+}
+
+.dashboard-card .icon {
+    font-size: 3rem;
+    color: var(--cyber-cyan);
+    margin-bottom: 1rem;
+}
+
+.dashboard-card .number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--cyber-text);
+}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h1>💼 Placement Interview Assistant</h1>
+
+        <p class="text-muted">
+            Generate instant interview questions for your target role.
+        </p>
+
+        <select
+            id="role"
+            class="form-select">
+
+            <option>Cyber Security Analyst</option>
+
+            <option>Network Engineer</option>
+
+            <option>Software Engineer</option>
+
+            <option>Data Analyst</option>
+
+            <option>Cloud Engineer</option>
+
+            <option>DevOps Engineer</option>
+
+            <option>Python Developer</option>
+
+            <option>Java Developer</option>
+
+            <option>AI Engineer</option>
+
+        </select>
+
+        <button
+            class="btn btn-warning mt-3"
+            onclick="generateQuestions()">
+
+            Generate Questions
+
+        </button>
+
+        <div
+            id="result"
+            class="mt-4">
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function generateQuestions(){
+
+    let role =
+    document.getElementById(
+        "role"
+    ).value;
+
+    document.getElementById(
+        "result"
+    ).innerHTML =
+    `
+    <div class="alert alert-info">
+        Generating Questions...
+    </div>
+    `;
+
+    let response =
+    await fetch(
+        "/placement/analyze",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                role:role
+            })
+        }
+    );
+
+    let data =
+    await response.json();
+
+    let html =
+    `
+    <div class="card p-3">
+
+        <h3>
+            Interview Questions
+        </h3>
+
+        <ol>
+    `;
+
+    data.questions.forEach(function(q){
+
+        html += `<li>${q}</li>`;
+
+    });
+
+    html += `
+        </ol>
+
+    </div>
+    `;
+
+    document.getElementById(
+        "result"
+    ).innerHTML = html;
+}
+
+</script>
+
+{% endblock %}

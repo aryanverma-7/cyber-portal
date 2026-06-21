@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Register - CyberShield{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7">
+        <div class="cyber-card">
+            <div class="text-center mb-4">
+                <i class="bi bi-person-plus-fill text-cyan" style="font-size: 3rem;"></i>
+                <h2 class="text-cyan mt-2">Create Account</h2>
+                <p class="text-muted">Join CyberShield & Start Learning</p>
+            </div>
+            
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control bg-dark text-light border-secondary" 
+                               id="first_name" name="first_name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control bg-dark text-light border-secondary" 
+                               id="last_name" name="last_name" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control bg-dark text-light border-secondary" 
+                           id="username" name="username" required 
+                           pattern="[a-zA-Z0-9_]+" 
+                           title="Only letters, numbers, and underscores allowed">
+                    <small class="text-muted">Choose a unique username</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control bg-dark text-light border-secondary" 
+                           id="email" name="email" required>
+                    <small class="text-muted">We'll never share your email</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control bg-dark text-light border-secondary" 
+                           id="password" name="password" required 
+                           minlength="8">
+                    <small class="text-muted">Minimum 8 characters</small>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-cyan btn-lg">
+                        <i class="bi bi-check-circle"></i> Register Now
+                    </button>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Already have an account? Login
+                    </a>
+                </div>
+            </form>
+            
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="text-muted small">
+                    By registering, you agree to our <a href="#" class="text-cyan">Terms</a> 
+                    and <a href="#" class="text-cyan">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

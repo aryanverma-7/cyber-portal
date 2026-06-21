@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h2>
+Interview History
+</h2>
+
+<table class="table table-dark">
+
+<tr>
+<th>Role</th>
+<th>Date</th>
+<th>Question</th>
+</tr>
+
+{% for item in interviews %}
+
+<tr>
+
+<td>
+{{ item.role }}
+</td>
+
+<td>
+{{ item.created_at }}
+</td>
+
+<td>
+{{ item.question }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

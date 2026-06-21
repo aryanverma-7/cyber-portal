@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cyber Security Quiz
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1 class="text-info">
+        Cyber Security Quizzes
+    </h1>
+
+    <hr>
+
+    {% if questions %}
+
+    <div class="row">
+
+        {% for question in questions %}
+
+        <div class="col-md-6 col-lg-4 mb-4">
+
+            <div class="card h-100 shadow">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Question #{{ question.id }}
+                    </h5>
+
+                    <p class="card-text">
+                        {{ question.question }}
+                    </p>
+
+                    <p>
+                        <strong>Category:</strong>
+                        {{ question.category }}
+                    </p>
+
+                    <p>
+                        <strong>Difficulty:</strong>
+                        {{ question.difficulty }}
+                    </p>
+
+                    <p>
+                        <strong>Points:</strong>
+                        {{ question.points }}
+                    </p>
+
+                    <a href="{{ url_for('quiz.start_quiz') }}"
+                       class="btn btn-primary">
+
+                        Start Quiz
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-warning">
+
+        No quiz questions available.
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

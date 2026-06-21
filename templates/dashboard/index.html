@@ -1,0 +1,615 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CyberShield{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- HERO SECTION -->
+    <div class="hero-banner mb-5">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h1 class="hero-title">
+                    🛡 CyberShield
+                </h1>
+
+                <h2 class="hero-subtitle">
+                AI Powered Cyber Security &
+                GATE Preparation Platform
+                </h2>
+
+                <p class="lead text-light">
+                    Learn Cyber Security, Practice Real Labs,
+                    Solve GATE Doubts, Generate AI Quizzes,
+                    Analyze Resume and Prepare for Placements —
+                    all in one platform.
+                </p>
+
+                <div class="mt-4">
+
+                    <a href="/course/"
+                       class="btn btn-info me-2">
+                        Start Learning
+                    </a>
+
+                    <a href="/chatbot/"
+                       class="btn btn-outline-light">
+                        Ask AI
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="cyber-card">
+
+                    <h5 class="text-cyan mb-3">
+                        System Status
+                    </h5>
+
+                    <p>🟢 AI Assistant Online</p>
+                    <p>🟢 GATE Engine Active</p>
+                    <p>🟢 Resume Analyzer Ready</p>
+                    <p>🟢 Threat Detection Running</p>
+                    <p>🟢 Analytics Active</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- COUNTERS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <h2 id="queriesCounter">0</h2>
+
+                <p>AI Queries Solved</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <h2 id="quizCounter">0</h2>
+
+                <p>AI Quizzes Generated</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <h2 id="courseCounter">0</h2>
+
+                <p>Cyber Lessons</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <h2 id="studentCounter">0</h2>
+
+                <p>Students Trained</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI TOOLS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="/quiz/generate"
+               class="feature-card text-decoration-none">
+
+                <h2>
+                    <i class="bi bi-cpu-fill"></i>
+                </h2>
+
+                <h5>AI Quiz Generator</h5>
+
+                <p>Generate unlimited quizzes</p>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="/gate/"
+               class="feature-card text-decoration-none">
+
+                <h2>
+                    <i class="bi bi-mortarboard-fill"></i>
+                </h2>
+
+                <h5>GATE Doubt Solver</h5>
+
+                <p>Exam level solutions</p>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="/resume/"
+               class="feature-card text-decoration-none">
+
+                <h2>
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                </h2>
+
+                <h5>Resume Analyzer</h5>
+
+                <p>ATS & recruiter insights</p>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="/phishing/"
+               class="feature-card text-decoration-none">
+
+                <h2>
+                    <i class="bi bi-shield-fill-exclamation"></i>
+                </h2>
+
+                <h5>Phishing Simulator</h5>
+
+                <p>Practice cyber attack scenarios</p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- USER STATS -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <i class="bi bi-book-fill fs-1 text-info"></i>
+
+                <h3 class="mt-3">
+                    {{ total_courses }}
+                </h3>
+
+                <p>Available Courses</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <i class="bi bi-question-circle-fill fs-1 text-warning"></i>
+
+                <h3 class="mt-3">
+                    {{ total_questions }}
+                </h3>
+
+                <p>Quiz Questions</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <i class="bi bi-trophy-fill fs-1 text-success"></i>
+
+                <h3 class="mt-3">
+                    {{ completed_courses }}
+                </h3>
+
+                <p>Completed Courses</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card text-center">
+
+                <i class="bi bi-clock-history fs-1 text-danger"></i>
+
+                <h3 class="mt-3">
+                    {{ in_progress_courses }}
+                </h3>
+
+                <p>In Progress</p>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    <!-- Main Content Grid -->
+    <div class="row">
+        <!-- MAIN DASHBOARD SECTION -->
+
+        <div class="row g-4 mb-5">
+
+            <!-- LEFT COLUMN -->
+            <div class="col-lg-4">
+
+                <div class="cyber-card mb-4">
+
+                    <h4 class="text-cyan mb-4">
+                        <i class="bi bi-lightning-charge"></i>
+                        Quick Actions
+                    </h4>
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+                            <a href="{{ url_for('course.list_courses') }}" class="action-card">
+                                Courses
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ url_for('quiz.ai_generator') }}" class="action-card">
+                                AI Quiz
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ url_for('gate.index') }}" class="action-card">
+                                GATE Solver
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ url_for('resume.index') }}" class="action-card">
+                                Resume AI
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ url_for('password.index') }}" class="action-card">
+                                Password Lab
+                            </a>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="{{ url_for('chatbot.index') }}" class="action-card">
+                                AI Assistant
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-lg-8">
+
+                <!-- QUIZ PERFORMANCE -->
+
+                <div class="cyber-card mb-4">
+
+                    <h4 class="text-cyan mb-3">
+                        <i class="bi bi-clipboard-check"></i>
+                        Recent Quiz Performance
+                    </h4>
+
+                    {% if recent_scores %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-dark table-hover align-middle">
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Correct</th>
+                                    <th>Points</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for score in recent_scores %}
+
+                                <tr>
+
+                                    <td>{{ score.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+
+                                    <td>
+
+                                        {% if score.is_correct %}
+                                        <span class="text-success fw-bold">✓</span>
+                                        {% else %}
+                                        <span class="text-danger fw-bold">✗</span>
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>{{ score.points }}</td>
+
+                                    <td>
+
+                                        {% if score.is_correct %}
+                                        <span class="badge bg-success">
+                                            Correct
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-danger">
+                                            Incorrect
+                                        </span>
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="text-muted">
+                        No quiz scores yet.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- PHISHING -->
+
+                <div class="cyber-card">
+
+                    <h4 class="text-cyan mb-3">
+                        <i class="bi bi-envelope-exclamation"></i>
+                        Recent Phishing Checks
+                    </h4>
+
+                    {% if recent_phishing %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-dark table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Risk Score</th>
+                                    <th>Status</th>
+                                    <th>Level</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for case in recent_phishing %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ case.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </td>
+
+                                    <td>
+                                        {{ case.risk_score }}
+                                    </td>
+
+                                    <td>
+
+                                        {% if case.is_phishing %}
+                                        <span class="text-warning">
+                                            ⚠ Phishing
+                                        </span>
+                                        {% else %}
+                                        <span class="text-success">
+                                            ✓ Safe
+                                        </span>
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge bg-info">
+
+                                            {{ case.get_risk_level() }}
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="text-muted">
+
+                        No phishing checks yet.
+
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+    <!-- Threat Dashboard Link -->
+    <div class="row">
+        <div class="col-12">
+            <div class="cyber-card">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="text-red">
+                            <i class="bi bi-alert-triangle"></i> Cyber Threat Dashboard
+                        </h4>
+                        <p class="text-muted">View latest threats, trending scams, and vulnerabilities</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{{ url_for('phishing.threat_dashboard') }}" class="btn btn-red">
+                            <i class="bi bi-arrow-right"></i> View Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Chart Script -->
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+function animateCounter(id,target){
+
+    let count = 0;
+
+    let speed = target / 50;
+
+    let interval = setInterval(()=>{
+
+        count += speed;
+
+        if(count >= target){
+
+            count = target;
+
+            clearInterval(interval);
+
+        }
+
+        document.getElementById(id).innerText =
+            Math.floor(count) + "+";
+
+    },30);
+
+}
+
+animateCounter("queriesCounter",12500);
+animateCounter("quizCounter",3200);
+animateCounter("courseCounter",150);
+animateCounter("studentCounter",850);
+
+const text =
+"AI Powered Cyber Security Learning Platform";
+
+let i = 0;
+
+function typeEffect(){
+
+    if(i < text.length){
+
+        document.getElementById(
+            "typingText"
+        ).innerHTML += text.charAt(i);
+
+        i++;
+
+        setTimeout(
+            typeEffect,
+            50
+        );
+    }
+}
+
+typeEffect();
+
+</script>
+<script>
+// Progress Chart
+const ctx = document.getElementById('progressChart');
+const progressData = {{ [completed_courses|default(0)|int, in_progress_courses|default(0)|int] | tojson }};
+const progressChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Completed', 'In Progress'],
+        datasets: [{
+            data: progressData,
+            backgroundColor: [
+                'rgba(0, 255, 136, 0.8)',
+                'rgba(0, 212, 255, 0.8)'
+            ],
+            borderColor: [
+                'rgba(0, 255, 136, 1)',
+                'rgba(0, 212, 255, 1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e5e7eb'
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

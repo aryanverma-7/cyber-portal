@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Phishing Simulator - CyberShield{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-cyan">
+                <i class="bi bi-envelope-warning"></i> Interactive Phishing Simulator
+            </h1>
+            <p class="text-muted">Learn to detect phishing emails and malicious URLs</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-envelope"></i> Email Detection
+                </h4>
+                <form id="emailForm">
+                    <div class="mb-3">
+                        <label class="form-label">Sender Email</label>
+                        <input type="email" id="emailSender" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" id="emailSubject" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Content</label>
+                        <textarea id="emailContent" class="form-control bg-dark text-light border-secondary" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-cyan w-100">
+                        <i class="bi bi-search"></i> Analyze Email
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-link-45deg"></i> URL Detection
+                </h4>
+                <form id="urlForm">
+                    <div class="mb-3">
+                        <label class="form-label">URL to Check</label>
+                        <input type="url" id="urlInput" class="form-control bg-dark text-light border-secondary" 
+                               placeholder="https://example.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-cyan w-100">
+                        <i class="bi bi-search"></i> Analyze URL
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results Section -->
+    <div class="row" id="resultsSection" style="display: none;">
+        <div class="col-12">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-clipboard-check"></i> Analysis Results
+                </h4>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Email Form Submission
+document.getElementById('emailForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const data = {
+        sender: document.getElementById('emailSender').value,
+        subject: document.getElementById('emailSubject').value,
+        content: document.getElementById('emailContent').value
+    };
+    
+    try {
+        const response = await fetch('/phishing/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        displayResults(result, 'email');
+    } catch (error) {
+        alert('Error analyzing email: ' + error.message);
+    }
+});
+
+// URL Form Submission
+document.getElementById('urlForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const data = {
+        url: document.getElementById('urlInput').value
+    };
+    
+    try {
+        const response = await fetch('/phishing/check-url', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        displayResults(result, 'url');
+    } catch (error) {
+        alert('Error analyzing URL: ' + error.message);
+    }
+});
+
+function displayResults(result, type) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    resultsSection.style.display = 'block';
+    
+    const statusClass = result.is_phishing ? 'text-red' : 'text-green';
+    const statusIcon = result.is_phishing ? '⚠️' : '✓';
+    const badgeClass = result.is_phishing ? 'bg-red' : 'bg-green';
+    
+    let reasonsHtml = result.reasons.map(reason => 
+        `<li class="text-muted">${reason}</li>`
+    ).join('');
+    
+    resultsContent.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="${statusClass}">
+                    ${statusIcon} ${result.is_phishing ? 'PHISHING DETECTED' : 'Appears Safe'}
+                </h5>
+                <p>Risk Score: <span class="font-weight-bold">${result.risk_score}</span></p>
+                <p>Risk Level: <span class="badge ${badgeClass}">${result.risk_level}</span></p>
+            </div>
+            <div class="col-md-6">
+                <h5>Detection Reasons</h5>
+                <ul class="list-unstyled">${reasonsHtml}</ul>
+            </div>
+        </div>
+        <hr>
+        <p class="text-cyan"><strong>Recommendation:</strong> ${result.recommendation}</p>
+    `;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Packet Visualizer{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+```
+<div class="card shadow p-4">
+
+    <h2>📡 Packet Visualizer</h2>
+
+    <p class="text-muted">
+        Simulate TCP, UDP, HTTP and HTTPS packet flow.
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>Protocol</label>
+            <select id="protocol" class="form-select">
+                <option value="TCP">TCP</option>
+                <option value="UDP">UDP</option>
+                <option value="HTTP">HTTP</option>
+                <option value="HTTPS">HTTPS</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label>Source IP</label>
+            <input
+                id="source_ip"
+                class="form-control"
+                value="192.168.1.100">
+        </div>
+
+    </div>
+
+    <div class="row mt-3">
+
+        <div class="col-md-6">
+            <label>Destination IP</label>
+            <input
+                id="dest_ip"
+                class="form-control"
+                value="8.8.8.8">
+        </div>
+
+        <div class="col-md-3">
+            <label>Source Port</label>
+            <input
+                id="source_port"
+                type="number"
+                class="form-control"
+                value="54321">
+        </div>
+
+        <div class="col-md-3">
+            <label>Destination Port</label>
+            <input
+                id="dest_port"
+                type="number"
+                class="form-control"
+                value="80">
+        </div>
+
+    </div>
+
+    <button
+        class="btn btn-primary mt-4"
+        onclick="simulatePacket()">
+
+        Simulate Packet
+
+    </button>
+
+</div>
+
+<div id="result" class="mt-4"></div>
+```
+
+</div>
+
+<script>
+
+async function simulatePacket() {
+
+    try {
+
+        document.getElementById("result").innerHTML =
+        `
+        <div class="alert alert-info">
+            Simulating Packet...
+        </div>
+        `;
+
+        const response = await fetch(
+            "/networking/packet-visualizer/simulate",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    protocol: document.getElementById("protocol").value,
+                    source_ip: document.getElementById("source_ip").value,
+                    dest_ip: document.getElementById("dest_ip").value,
+                    source_port: document.getElementById("source_port").value,
+                    dest_port: document.getElementById("dest_port").value
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        console.log(data);
+
+        let flowHtml = "";
+
+        data.packet.flow.forEach(step => {
+
+            flowHtml += `
+            <li>
+                <b>${step.action}</b> :
+                ${step.description}
+            </li>
+            `;
+
+        });
+
+        let timelineHtml = "";
+
+        data.packet.timeline.forEach(item => {
+
+            timelineHtml += `
+            <li>
+                <b>${item.time}</b> -
+                ${item.event}
+                (${item.details})
+            </li>
+            `;
+
+        });
+
+        document.getElementById("result").innerHTML =
+        `
+        <div class="card shadow p-4">
+
+            <h3>Packet Simulation Result</h3>
+
+            <hr>
+
+            <p>
+                <b>Protocol:</b>
+                ${data.packet.protocol}
+            </p>
+
+            <p>
+                <b>Source:</b>
+                ${data.packet.source.ip}:${data.packet.source.port}
+            </p>
+
+            <p>
+                <b>Destination:</b>
+                ${data.packet.destination.ip}:${data.packet.destination.port}
+            </p>
+
+            <hr>
+
+            <h4>Packet Flow</h4>
+
+            <ul>
+                ${flowHtml}
+            </ul>
+
+            <hr>
+
+            <h4>Timeline</h4>
+
+            <ul>
+                ${timelineHtml}
+            </ul>
+
+            <div class="alert alert-success">
+
+                Packet Successfully Simulated
+
+            </div>
+
+        </div>
+        `;
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("result").innerHTML =
+        `
+        <div class="alert alert-danger">
+
+            Error:
+            ${error}
+
+        </div>
+        `;
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

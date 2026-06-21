@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Login - CyberShield{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7">
+        <div class="cyber-card">
+            <div class="text-center mb-4">
+                <i class="bi bi-shield-lock-fill text-cyan" style="font-size: 3rem;"></i>
+                <h2 class="text-cyan mt-2">Welcome Back</h2>
+                <p class="text-muted">Login to your CyberShield account</p>
+            </div>
+            
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username or Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-light">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <input type="text" class="form-control bg-dark text-light border-secondary" 
+                               id="username" name="username" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-light">
+                            <i class="bi bi-key"></i>
+                        </span>
+                        <input type="password" class="form-control bg-dark text-light border-secondary" 
+                               id="password" name="password" required>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-cyan btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </button>
+                    <a href="{{ url_for('auth.reset_password_request') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-question-circle"></i> Reset Password
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-cyan">
+                        <i class="bi bi-person-plus"></i> Create Account
+                    </a>
+                </div>
+            </form>
+            
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="text-muted small">
+                    Protected by <span class="text-green">bcrypt</span> encryption 🔐
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

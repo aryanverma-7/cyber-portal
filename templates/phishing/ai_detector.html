@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Phishing Detector
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1 class="text-danger">
+        AI Phishing Detector
+    </h1>
+
+    <hr>
+
+    <div class="card p-4">
+
+        <textarea
+            id="message"
+            class="form-control"
+            rows="10"
+            placeholder="Paste suspicious email here">
+        </textarea>
+
+        <button
+            class="btn btn-danger mt-3"
+            onclick="scanEmail()">
+
+            Analyze Email
+
+        </button>
+
+    </div>
+
+    <div id="result" class="mt-4"></div>
+
+</div>
+
+<script>
+
+function scanEmail(){
+
+    const message =
+        document.getElementById(
+            "message"
+        ).value;
+
+    fetch(
+        "/phishing/ai-check",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                message:message
+            })
+        }
+    )
+    .then(res=>res.json())
+    .then(data=>{
+
+        document.getElementById(
+            "result"
+        ).innerHTML =
+        `
+        <div class="card p-4">
+            <h3>Analysis Result</h3>
+            <pre>${data.result}</pre>
+        </div>
+        `;
+    });
+
+}
+
+</script>
+
+{% endblock %}

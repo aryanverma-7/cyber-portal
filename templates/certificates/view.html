@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Certificate
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card p-5 text-center">
+
+        <h1>
+            Certificate of Completion
+        </h1>
+
+        <hr>
+
+        <h3>
+            {{ username }}
+        </h3>
+
+        <p>
+            has successfully completed
+        </p>
+
+        <h2>
+            {{ course_name }}
+        </h2>
+
+        <p>
+            Date:
+            {{ date }}
+        </p>
+
+        <p>
+            Certificate ID:
+            {{ certificate_code }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}DNS Lookup{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1 class="text-info">
+        DNS Lookup Tool
+    </h1>
+
+    <hr>
+
+    <form id="dnsForm">
+
+        <div class="mb-3">
+
+            <input
+                type="text"
+                class="form-control"
+                id="domain"
+                placeholder="example.com">
+
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="lookupDNS()">
+
+            Lookup
+
+        </button>
+
+    </form>
+
+    <div id="result" class="mt-4"></div>
+
+</div>
+
+<script>
+
+function lookupDNS(){
+
+    let domain =
+        document.getElementById("domain").value;
+
+    fetch(
+        "/networking/dns-lookup/execute",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                domain:domain
+            })
+        }
+    )
+    .then(res=>res.json())
+    .then(data=>{
+
+        document.getElementById("result").innerHTML=
+        `
+        <div class="card p-3">
+            <h4>Result</h4>
+            <pre>${JSON.stringify(data,null,2)}</pre>
+        </div>
+        `;
+    });
+}
+
+</script>
+
+{% endblock %}

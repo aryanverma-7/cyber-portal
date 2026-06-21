@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - CyberShield{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+```
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="text-cyan">
+            <i class="bi bi-book-fill"></i>
+            Cyber Learning Hub
+        </h1>
+
+        <p class="text-muted">
+            Master Cybersecurity from Beginner to Advanced
+        </p>
+
+        <div class="alert alert-info">
+            Total Courses Available:
+            <strong>{{ courses|length }}</strong>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+
+        <div class="card p-3">
+
+            <form method="GET"
+                  action="{{ url_for('course.list_courses') }}">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Level
+                        </label>
+
+                        <select name="level"
+                                class="form-select">
+
+                            <option value="">
+                                All Levels
+                            </option>
+
+                            <option value="beginner">
+                                Beginner
+                            </option>
+
+                            <option value="intermediate">
+                                Intermediate
+                            </option>
+
+                            <option value="advanced">
+                                Advanced
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Category
+                        </label>
+
+                        <select name="category"
+                                class="form-select">
+
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            <option value="phishing">
+                                Phishing
+                            </option>
+
+                            <option value="password">
+                                Password Security
+                            </option>
+
+                            <option value="network">
+                                Networking
+                            </option>
+
+                            <option value="malware">
+                                Malware
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            &nbsp;
+                        </label>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            Filter Courses
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Course Cards -->
+
+<div class="row">
+
+    {% for course in courses %}
+
+    <div class="col-lg-4 col-md-6 mb-4">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h4 class="card-title">
+                    {{ course.title }}
+                </h4>
+
+                <p class="card-text">
+                    {{ course.description }}
+                </p>
+
+                <hr>
+
+                <p>
+                    <strong>Level:</strong>
+                    {{ course.level }}
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ course.category }}
+                </p>
+
+                <p>
+                    <strong>Duration:</strong>
+                    {{ course.duration_minutes }} Minutes
+                </p>
+
+                <p>
+                    <strong>Lessons:</strong>
+                    {{ course.lessons_count }}
+                </p>
+
+            </div>
+
+            <div class="card-footer bg-white">
+
+                <a href="{{ url_for('course.view_course', course_id=course.id) }}"
+                   class="btn btn-primary w-100">
+
+                    Open Course
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="col-12">
+
+        <div class="alert alert-warning text-center">
+
+            No Courses Found
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+```
+
+</div>
+
+{% endblock %}

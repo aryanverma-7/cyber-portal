@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Password Security Lab - CyberShield{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-cyan">
+                <i class="bi bi-key"></i> Password Security Lab
+            </h1>
+            <p class="text-muted">Check password strength, calculate entropy, and get security suggestions</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-shield-check"></i> Password Strength Checker
+                </h4>
+                <form id="passwordForm">
+                    <div class="mb-3">
+                        <label class="form-label">Enter Password</label>
+                        <div class="input-group">
+                            <input type="text" id="passwordInput" class="form-control bg-dark text-light border-secondary" required>
+                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Your password is NOT sent to any server</small>
+                    </div>
+                    <button type="submit" class="btn btn-cyan w-100">
+                        <i class="bi bi-search"></i> Analyze Password
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-magic"></i> Generate Strong Password
+                </h4>
+                <div class="mb-3">
+                    <label class="form-label">Length: <span id="lengthValue">16</span></label>
+                    <input type="range" id="passwordLength" class="form-range" min="8" max="32" value="16">
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex gap-3">
+                        <label><input type="checkbox" id="useUpper" checked> A-Z</label>
+                        <label><input type="checkbox" id="useLower" checked> a-z</label>
+                        <label><input type="checkbox" id="useNumbers" checked> 0-9</label>
+                        <label><input type="checkbox" id="useSpecial" checked> !@#</label>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-green w-100" id="generatePassword">
+                    <i class="bi bi-magic"></i> Generate
+                </button>
+                <div id="generatedPassword" class="mt-3 p-3 bg-dark rounded text-cyan text-break" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="row" id="resultsSection" style="display: none;">
+        <div class="col-12">
+            <div class="cyber-card">
+                <h4 class="text-cyan mb-3">
+                    <i class="bi bi-chart-line"></i> Analysis Results
+                </h4>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Password Analysis
+document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const password = document.getElementById('passwordInput').value;
+    
+    try {
+        const response = await fetch('/password/check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password })
+        });
+        
+        const result = await response.json();
+        displayPasswordResults(result);
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+// Generate Password
+document.getElementById('generatePassword').addEventListener('click', async function() {
+    const data = {
+        length: document.getElementById('passwordLength').value,
+        use_upper: document.getElementById('useUpper').checked,
+        use_lower: document.getElementById('useLower').checked,
+        use_numbers: document.getElementById('useNumbers').checked,
+        use_special: document.getElementById('useSpecial').checked
+    };
+    
+    try {
+        const response = await fetch('/password/generate-strong', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        const generatedDiv = document.getElementById('generatedPassword');
+        generatedDiv.textContent = result.password;
+        generatedDiv.style.display = 'block';
+        
+        displayPasswordResults(result.analysis);
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+// Update length slider
+document.getElementById('passwordLength').addEventListener('input', function() {
+    document.getElementById('lengthValue').textContent = this.value;
+});
+
+// Toggle password visibility
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const input = document.getElementById('passwordInput');
+    const type = input.type === 'text' ? 'password' : 'text';
+    input.type = type;
+    this.innerHTML = type === 'text' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+});
+
+function displayPasswordResults(result) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    resultsSection.style.display = 'block';
+    
+    const strengthColor = result.strength === 'Very Strong' || result.strength === 'Strong' ? 'text-green' : 
+                          result.strength === 'Medium' ? 'text-cyan' : 'text-red';
+    
+    let issuesHtml = result.issues.length > 0 ? 
+        result.issues.map(issue => `<li class="text-red">⚠️ ${issue}</li>`).join('') : 
+        '<li class="text-green">✓ No issues found</li>';
+    
+    let suggestionsHtml = result.suggestions.map(suggestion => 
+        `<li class="text-cyan">💡 ${suggestion}</li>`
+    ).join('');
+    
+    resultsContent.innerHTML = `
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Strength</h5>
+                <p class="${strengthColor} font-weight-bold" style="font-size: 1.5rem;">${result.strength}</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Score</h5>
+                <p class="text-cyan font-weight-bold" style="font-size: 1.5rem;">${result.score}/100</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Entropy</h5>
+                <p class="text-purple font-weight-bold" style="font-size: 1.5rem;">${result.entropy} bits</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Crack Time</h5>
+                <p class="text-green font-weight-bold">${result.crack_time}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Issues</h5>
+                <ul class="list-unstyled">${issuesHtml}</ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Suggestions</h5>
+                <ul class="list-unstyled">${suggestionsHtml}</ul>
+            </div>
+        </div>
+    `;
+}
+</script>
+{% endblock %}

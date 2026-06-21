@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Networking Lab{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1 class="text-info">
+
+        Networking Lab
+
+    </h1>
+
+    <hr>
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h4>DNS Lookup</h4>
+
+                    <p>Resolve domains and view IP addresses.</p>
+
+                    <a href="{{ url_for('networking.dns_lookup') }}"
+                       class="btn btn-primary">
+
+                       Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h4>Packet Visualizer</h4>
+
+                    <p>Learn packet flow in networks.</p>
+
+                    <a href="{{ url_for('networking.packet_visualizer') }}"
+                       class="btn btn-success">
+
+                       Open
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
