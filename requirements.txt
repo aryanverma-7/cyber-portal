@@ -17,3 +17,4 @@ groq
 PyPDF2
 pdfplumber
 tldextract
+python-docx
